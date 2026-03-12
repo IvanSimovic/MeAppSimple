@@ -1,5 +1,6 @@
 package com.simovic.meappsimple.feature.birthday.presentation.screen.birthdaylist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
@@ -102,45 +105,60 @@ private fun Content(
     onMarkedForDelete: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier.padding(horizontal = Dimen.screenContentPadding)) {
-        itemsIndexed(uiState.birthdays, key = { _, item -> item.id }) { index, item ->
-            Column {
-                Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimen.spaceL),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            item.name,
-                            style = AppTheme.typo.head5,
-                            color = AppTheme.color.textMain,
-                        )
-                        Spacer(Modifier.height(Dimen.spaceM))
-                        Text(
-                            item.date,
-                            style = AppTheme.typo.head2,
-                            color = AppTheme.color.textMain,
-                        )
-                    }
-                    if (uiState.isDeleteModeActive) {
-                        Spacer(Modifier.width(Dimen.spaceL))
-                        AppCheckbox(
-                            checked = item.isMarkedForDelete,
-                            onCheckedChange = { onMarkedForDelete(item.id) },
-                        )
-                    }
-                }
-
+    if (uiState.birthdays.isEmpty()) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(
+                text = stringResource(R.string.no_birthdays_yet),
+                style = AppTheme.typo.body1,
+                color = AppTheme.color.textMuted,
+            )
+        }
+    } else {
+        LazyColumn(modifier.padding(horizontal = Dimen.screenContentPadding)) {
+            itemsIndexed(uiState.birthdays, key = { _, item -> item.id }) { index, item ->
+                BirthdayItem(
+                    item = item,
+                    isDeleteModeActive = uiState.isDeleteModeActive,
+                    onMarkedForDelete = onMarkedForDelete,
+                )
                 if (index < uiState.birthdays.lastIndex) {
-                    HorizontalDivider(
-                        color = AppTheme.color.divider,
-                        thickness = Dimen.dividerThickness,
-                    )
+                    HorizontalDivider(color = AppTheme.color.divider, thickness = Dimen.dividerThickness)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun BirthdayItem(
+    item: BirthDayListModel,
+    isDeleteModeActive: Boolean,
+    onMarkedForDelete: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth().padding(vertical = Dimen.spaceL),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier.size(Dimen.avatarSize).background(AppTheme.color.brandPrimary, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = item.name.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
+                style = AppTheme.typo.head5,
+                color = AppTheme.color.onBrandPrimary,
+            )
+        }
+        Spacer(Modifier.width(Dimen.spaceL))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(item.date, style = AppTheme.typo.head4, color = AppTheme.color.textMain)
+            Spacer(Modifier.height(Dimen.spaceS))
+            Text(item.name, style = AppTheme.typo.body1, color = AppTheme.color.textMuted)
+        }
+        if (isDeleteModeActive) {
+            Spacer(Modifier.width(Dimen.spaceL))
+            AppCheckbox(checked = item.isMarkedForDelete, onCheckedChange = { onMarkedForDelete(item.id) })
         }
     }
 }
@@ -167,6 +185,17 @@ private fun FeedGridPreview() {
     AppPreview {
         Content(
             uiState = BirthDayUiState.Content(sampleData, isDeleteModeActive = false, isSelectedForDelete = false),
+            onMarkedForDelete = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun EmptyPreview() {
+    AppPreview {
+        Content(
+            uiState = BirthDayUiState.Content(emptyList(), isDeleteModeActive = false, isSelectedForDelete = false),
             onMarkedForDelete = {},
         )
     }

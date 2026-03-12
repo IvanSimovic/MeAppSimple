@@ -9,6 +9,7 @@ object Dimen {
     val spaceXL = 32.dp
     val spaceXXL = 64.dp
     val screenContentPadding = spaceL
+    val avatarSize = 40.dp
     val imageSize = 100.dp
     val albumCoverSize = 320.dp
     val dividerThickness = 1.dp

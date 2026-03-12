@@ -27,6 +27,7 @@
     <string name="common_data_not_found">Data not found</string>
     <string name="name">Name</string>
     <string name="add">Add</string>
+    <string name="no_birthdays_yet">No birthdays yet</string>
     <string name="search">Search</string>
     <string name="clear_search">Clear search</string>
     <string name="open_full_article">Open full article</string>
