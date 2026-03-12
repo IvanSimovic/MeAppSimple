@@ -20,14 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.simovic.meappsimple.base.util.DATE_PLACEHOLDER_YEAR
 import java.time.LocalDate
 import java.time.YearMonth
+
+private const val WHEEL_VISIBLE_ITEMS = 3
 
 @Composable
 fun MonthDayWheelPicker(
     onChange: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
-    date: LocalDate = LocalDate.of(2000, 1, 1),
+    date: LocalDate = LocalDate.of(DATE_PLACEHOLDER_YEAR, 1, 1),
 ) {
     val currentOnChange by rememberUpdatedState(onChange)
     val currentDay = date.dayOfMonth
@@ -85,7 +88,7 @@ fun WheelPicker(
     }
 
     Box(
-        modifier = modifier.height(itemHeight * 3),
+        modifier = modifier.height(itemHeight * WHEEL_VISIBLE_ITEMS),
         contentAlignment = Alignment.Center,
     ) {
         LazyColumn(

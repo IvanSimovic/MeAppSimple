@@ -32,11 +32,12 @@ fun AlbumListScreen(
     onNavigateToAlbumDetail: ((artistName: String, albumName: String, albumMbId: String?) -> Unit)? = null,
 ) {
     val viewModel: AlbumListViewModel = koinViewModel()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
+    val query by viewModel.query.collectAsStateWithLifecycle()
 
     Column(modifier = modifier.fillMaxSize()) {
         SearchBar(
-            query = "",
+            query = query,
             onQueryChange = { newQuery ->
                 viewModel.onQueryChanged(newQuery)
             },

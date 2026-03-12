@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew app:detektCheck app:spotlessCheck 2>&1)",
+      "Bash(./gradlew app:spotlessApply 2>&1)"
+    ]
+  }
+}

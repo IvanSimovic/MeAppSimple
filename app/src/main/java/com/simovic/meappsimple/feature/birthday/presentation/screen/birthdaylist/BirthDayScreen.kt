@@ -29,9 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.simovic.meappsimple.R
+import com.simovic.meappsimple.base.common.res.Dimen
 import com.simovic.meappsimple.base.presentation.compose.composable.AppCheckbox
 import com.simovic.meappsimple.base.presentation.compose.composable.AppPreview
 import com.simovic.meappsimple.base.presentation.compose.composable.ErrorAnim
@@ -102,14 +102,14 @@ private fun Content(
     onMarkedForDelete: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier.padding(horizontal = 20.dp)) {
+    LazyColumn(modifier.padding(horizontal = Dimen.screenContentPadding)) {
         itemsIndexed(uiState.birthdays, key = { _, item -> item.id }) { index, item ->
             Column {
                 Row(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 12.dp),
+                            .padding(vertical = Dimen.spaceL),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
@@ -118,7 +118,7 @@ private fun Content(
                             style = AppTheme.typo.head5,
                             color = AppTheme.color.textMain,
                         )
-                        Spacer(Modifier.height(10.dp))
+                        Spacer(Modifier.height(Dimen.spaceM))
                         Text(
                             item.date,
                             style = AppTheme.typo.head2,
@@ -126,7 +126,7 @@ private fun Content(
                         )
                     }
                     if (uiState.isDeleteModeActive) {
-                        Spacer(Modifier.width(20.dp))
+                        Spacer(Modifier.width(Dimen.spaceL))
                         AppCheckbox(
                             checked = item.isMarkedForDelete,
                             onCheckedChange = { onMarkedForDelete(item.id) },
@@ -137,7 +137,7 @@ private fun Content(
                 if (index < uiState.birthdays.lastIndex) {
                     HorizontalDivider(
                         color = AppTheme.color.divider,
-                        thickness = 1.dp,
+                        thickness = Dimen.dividerThickness,
                     )
                 }
             }

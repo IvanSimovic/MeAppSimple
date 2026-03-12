@@ -2,6 +2,7 @@ package com.simovic.meappsimple.feature.birthday.presentation.screen.birthdayadd
 
 import androidx.lifecycle.viewModelScope
 import com.simovic.meappsimple.base.presentation.viewmodel.BaseViewModel
+import com.simovic.meappsimple.base.util.DATE_PLACEHOLDER_YEAR
 import com.simovic.meappsimple.feature.birthday.domain.model.CreateBirthDay
 import com.simovic.meappsimple.feature.birthday.domain.repository.BirthDayRepo
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ internal class BirthDayAddViewModel(
     ) {
         viewModelScope.launch {
             if (!name.isEmpty()) {
-                birthDayRepo.add(CreateBirthDay(name, LocalDate.of(2000, month, dayOfMonth)))
+                birthDayRepo.add(CreateBirthDay(name, LocalDate.of(DATE_PLACEHOLDER_YEAR, month, dayOfMonth)))
                 sendAction(BirthDayAddAction.Success())
             }
         }
