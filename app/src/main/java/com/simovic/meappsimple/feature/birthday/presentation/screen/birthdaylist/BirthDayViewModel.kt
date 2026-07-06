@@ -4,36 +4,28 @@ import androidx.lifecycle.viewModelScope
 import com.simovic.meappsimple.base.domain.result.Result
 import com.simovic.meappsimple.base.presentation.viewmodel.BaseViewModel
 import com.simovic.meappsimple.feature.birthday.domain.repository.BirthDayRepo
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 internal class BirthDayViewModel(
     private val birthDayRepo: BirthDayRepo,
 ) : BaseViewModel<BirthDayUiState, BirthDayAction>(BirthDayUiState.Loading) {
-    private var job: Job? = null
 
     fun get() {
-        if (job != null) {
-            job?.cancel()
-            job = null
-        }
-
-        job =
-            viewModelScope.launch {
-                birthDayRepo.get().also { result ->
-                    val liveFeedAction =
-                        when (result) {
-                            is Result.Success -> {
-                                BirthDayAction.Success(result.value.toBirthDayListModel())
-                            }
-
-                            is Result.Failure -> {
-                                BirthDayAction.Fail
-                            }
+        viewModelScope.launch {
+            birthDayRepo.get().also { result ->
+                val liveFeedAction =
+                    when (result) {
+                        is Result.Success -> {
+                            BirthDayAction.Success(result.value.toBirthDayListModel())
                         }
-                    sendAction(liveFeedAction)
-                }
+
+                        is Result.Failure -> {
+                            BirthDayAction.Fail
+                        }
+                    }
+                sendAction(liveFeedAction)
             }
+        }
     }
 
     fun selectForDelete(id: Long) {
@@ -47,15 +39,15 @@ internal class BirthDayViewModel(
         val state = uiStateFlow.value as? BirthDayUiState.Content ?: return
         if (!state.isDeleteModeActive) {
             sendAction(BirthDayAction.StartDelete(state.birthdays))
-        } else if (!state.isSelectedForDelete) {
-            sendAction(BirthDayAction.StopDelete(state.birthdays))
-        } else {
+        } else if (state.isSelectedForDelete) {
             viewModelScope.launch {
                 state.birthdays.filter { it.isMarkedForDelete }.forEach { item ->
                     birthDayRepo.remove(item.id)
                 }
                 sendAction(BirthDayAction.StopDelete(state.birthdays.filter { !it.isMarkedForDelete }))
             }
+        } else {
+            sendAction(BirthDayAction.StopDelete(state.birthdays))
         }
     }
 }
