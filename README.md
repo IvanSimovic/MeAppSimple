@@ -1,4 +1,4 @@
-# MeApp — Simple
+# MeApp Simple
 
 An Android application built to demonstrate Clean Architecture and MVI on a single-module setup. A multi-module version of this project also exists, where each feature and layer is a separate Gradle module.
 
@@ -24,7 +24,7 @@ State management follows a unidirectional MVI pattern built on a shared `BaseVie
 User event → Action → reduce(currentState) → new State → UI
 ```
 
-Each `Action` is a pure function that takes the current state and returns the next one. Duplicate states are deduplicated before emission — the UI only receives a new state when something actually changed. A `StateTimeTravelDebugger` logs every action and state transition in debug builds.
+Each `Action` is a pure function that takes the current state and returns the next one. Duplicate states are deduplicated before emission, the UI only receives a new state when something actually changed. A `StateTimeTravelDebugger` logs every action and state transition in debug builds.
 
 ### Result type
 
@@ -74,7 +74,7 @@ A local-only birthday tracker. Add a birthday with a date picker, view the list 
 
 ## Static Analysis & Architecture Tests
 
-The project uses [Konsist](https://github.com/LemonAppDev/konsist) to enforce architecture rules as automated tests — verifying layer boundaries, naming conventions, and dependency direction at build time rather than in code review.
+The project uses [Konsist](https://github.com/LemonAppDev/konsist) to enforce architecture rules as automated tests, verifying layer boundaries, naming conventions, and dependency direction at build time rather than in code review.
 
 Detekt and Spotless (ktlint) run on every build to enforce code style and catch common issues.
 
